@@ -13,10 +13,42 @@ public sealed class DofusFightResultImageProcessingPipeline
     private const byte TextDetectionOffset = 5;
     private const double ImageScaleFactor = 1.5;
 
-    private static readonly Rgba32 DofusYellow = new(255, 209, 148);
-    private static readonly Rgba32 DofusYellowVariant = new(205, 169, 122);
-    private static readonly Rgba32 DofusLightYellow = new(240, 255, 79);
-    private static readonly Rgba32 DofusLightYellowVariant = new(188, 200, 78);
+    private static readonly Rgba32[] DofusMainColors =
+    [
+        // Bonta | Brakmar | Gold and Steel
+        new(255, 209, 148),
+        // Standard
+        new(240, 255, 79),
+        // Tribute
+        new(201, 237, 110),
+        // Belladone
+        new(222, 238, 110),
+        // Unicorn
+        new(255, 173, 237),
+        // Emerald
+        new(150, 248, 214),
+        // Sufokia | Pandala
+        new(255, 241, 148)
+    ];
+
+    private static readonly Rgba32[] DofusAllColors =
+    [
+        ..DofusMainColors,
+        // Bonta | Brakmar | Gold and Steel
+        new(205, 169, 122),
+        // Standard
+        new(188, 200, 78),
+        // Tribute
+        new(201, 237, 110),
+        // Belladone
+        new(189, 199, 103),
+        //Unicorn
+        new(216, 149, 202),
+        // Emerald
+        new(127, 206, 179),
+        // Sufokia | Pandala
+        new(215, 205, 134)
+    ];
 
     private static readonly Rgba32 White = new(255, 255, 255);
     private static readonly Rgba32 Black = new(0, 0, 0);
@@ -36,7 +68,7 @@ public sealed class DofusFightResultImageProcessingPipeline
             image,
             Axis.X,
             StrictColorTolerance,
-            DofusYellow, DofusLightYellow
+            DofusMainColors
         );
 
         if (minAuthorizedColorPosition.X is 0 || minAuthorizedColorPosition.X == image.Width)
@@ -57,10 +89,7 @@ public sealed class DofusFightResultImageProcessingPipeline
 
                 for (var x = 0; x < row.Length; x++)
                 {
-                    row[x] = _colorDetectionService.IsNearColors(row[x], ColorTolerance,
-                        DofusYellow, DofusYellowVariant, DofusLightYellow, DofusLightYellowVariant)
-                        ? Black
-                        : White;
+                    row[x] = _colorDetectionService.IsNearColors(row[x], ColorTolerance, DofusAllColors) ? Black : White;
                 }
             }
         });
