@@ -1,7 +1,7 @@
-﻿namespace Boufbot.Services.TextSanitizer;
+﻿namespace Boufbot.Core.Services.TextSanitizer;
 
-public sealed class DofusTextSanitizer
-    : IDofusTextSanitizer
+public sealed class DofusTextSanitizerService
+    : IDofusTextSanitizerService
 {
     private const byte MinCharacterName = 3;
 

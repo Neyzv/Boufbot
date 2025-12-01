@@ -1,5 +1,4 @@
 ﻿using Boufbot.OCR.Factories.Tesseract;
-using Boufbot.OCR.ImageProcessing;
 using Boufbot.OCR.Services.ImageProcessing;
 using Boufbot.OCR.Services.TextRecognition;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +17,5 @@ public static class ServiceCollectionExtensions
             .AddSingleton<IColorDetectionService, ColorDetectionService>()
             .AddSingleton<IImageResizingService, ImageResizingService>()
             .AddSingleton<ITextRecognitionService, TextRecognitionService>()
-            .AddSingleton<ITesseractEngineFactory, TesseractEngineFactory>()
-            .AddSingleton<DofusFightResultImageProcessingPipeline>();
+            .AddSingleton<ITesseractEngineFactory, TesseractEngineFactory>();
 }

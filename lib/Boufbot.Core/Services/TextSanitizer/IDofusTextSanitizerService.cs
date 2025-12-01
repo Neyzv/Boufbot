@@ -1,6 +1,6 @@
-﻿namespace Boufbot.Services.TextSanitizer;
+﻿namespace Boufbot.Core.Services.TextSanitizer;
 
-public interface IDofusTextSanitizer
+public interface IDofusTextSanitizerService
 {
     /// <summary>
     /// Sanitize the provided actor names coming from the fight result OCR.

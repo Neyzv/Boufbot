@@ -1,7 +1,6 @@
-﻿using Boufbot.Models;
-using Boufbot.OCR.Extensions;
+﻿using Boufbot.Core.Extensions;
+using Boufbot.Models;
 using Boufbot.Services.Http;
-using Boufbot.Services.TextSanitizer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -19,15 +18,14 @@ public static class HostApplicationBuilderExtensions
     private static HostApplicationBuilder AddServices(this HostApplicationBuilder builder)
     {
         builder.Services
+            .AddCore()
             .AddDiscordShardedGateway((options, sp) =>
             {
                 options.Token = sp.GetRequiredService<IOptions<DiscordConfiguration>>().Value.Token;
                 options.Intents = GatewayIntents.All;
             })
             .AddShardedGatewayHandlers(typeof(HostApplicationBuilderExtensions).Assembly)
-            .AddOCR()
-            .AddSingleton<IHttpService, HttpService>()
-            .AddSingleton<IDofusTextSanitizer, DofusTextSanitizer>();
+            .AddSingleton<IHttpService, HttpService>();
 
         return builder;
     }
