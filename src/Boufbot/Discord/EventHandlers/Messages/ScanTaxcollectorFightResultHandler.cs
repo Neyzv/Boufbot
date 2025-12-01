@@ -1,6 +1,7 @@
 ﻿using Boufbot.OCR.ImageProcessing;
 using Boufbot.OCR.Services.TextRecognition;
 using Boufbot.Services.Http;
+using Boufbot.Services.TextSanitizer;
 using NetCord.Gateway;
 using NetCord.Hosting.Gateway;
 
@@ -16,14 +17,17 @@ public sealed class ScanTaxcollectorFightResultHandler
     private readonly IHttpService _httpService;
     private readonly ITextRecognitionService _textRecognitionService;
     private readonly DofusFightResultImageProcessingPipeline _imageProcessingPipeline;
+    private readonly IDofusTextSanitizer _textSanitizer;
 
     public ScanTaxcollectorFightResultHandler(IHttpService httpService,
         ITextRecognitionService textRecognitionService,
-        DofusFightResultImageProcessingPipeline imageProcessingPipeline)
+        DofusFightResultImageProcessingPipeline imageProcessingPipeline,
+        IDofusTextSanitizer textSanitizer)
     {
         _httpService = httpService;
         _textRecognitionService = textRecognitionService;
         _imageProcessingPipeline = imageProcessingPipeline;
+        _textSanitizer = textSanitizer;
     }
 
     public async ValueTask HandleAsync(GatewayClient client, Message message)
@@ -40,9 +44,16 @@ public sealed class ScanTaxcollectorFightResultHandler
             return;
 
         var image = await _httpService.GetImageAsync(attachment.Url).ConfigureAwait(false);
-        
-        var text = _textRecognitionService.GetTextFromImage(image, _imageProcessingPipeline).Split(LineBreak).Select(x => x.Trim()).Where(x => x.Length > 0).ToArray();
 
-        await message.ReplyAsync(string.Join(",", text)).ConfigureAwait(false);
+        await message.ReplyAsync(
+            string.Join(
+                ",",
+                _textSanitizer.SanitizeFightResultNames(
+                    _textRecognitionService
+                        .GetTextFromImage(image, _imageProcessingPipeline)
+                        .Split(LineBreak)
+                    )
+                )
+            ).ConfigureAwait(false);
     }
 }

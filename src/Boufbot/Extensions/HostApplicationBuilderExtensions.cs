@@ -1,6 +1,7 @@
 ﻿using Boufbot.Models;
 using Boufbot.OCR.Extensions;
 using Boufbot.Services.Http;
+using Boufbot.Services.TextSanitizer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,7 +26,8 @@ public static class HostApplicationBuilderExtensions
             })
             .AddShardedGatewayHandlers(typeof(HostApplicationBuilderExtensions).Assembly)
             .AddOCR()
-            .AddSingleton<IHttpService, HttpService>();
+            .AddSingleton<IHttpService, HttpService>()
+            .AddSingleton<IDofusTextSanitizer, DofusTextSanitizer>();
 
         return builder;
     }
