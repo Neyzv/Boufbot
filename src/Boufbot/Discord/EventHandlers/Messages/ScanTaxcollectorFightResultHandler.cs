@@ -11,6 +11,7 @@ public sealed class ScanTaxcollectorFightResultHandler
 {
     private const string WebpImageContentType = "image/webp";
     private const string PngImageContentType = "image/png";
+    private const char LineBreak = '\n';
 
     private readonly IHttpService _httpService;
     private readonly ITextRecognitionService _textRecognitionService;
@@ -39,7 +40,9 @@ public sealed class ScanTaxcollectorFightResultHandler
             return;
 
         var image = await _httpService.GetImageAsync(attachment.Url).ConfigureAwait(false);
+        
+        var text = _textRecognitionService.GetTextFromImage(image, _imageProcessingPipeline).Split(LineBreak).Select(x => x.Trim()).Where(x => x.Length > 0).ToArray();
 
-        await message.ReplyAsync(_textRecognitionService.GetTextFromImage(image, _imageProcessingPipeline)).ConfigureAwait(false);
+        await message.ReplyAsync(string.Join(",", text)).ConfigureAwait(false);
     }
 }

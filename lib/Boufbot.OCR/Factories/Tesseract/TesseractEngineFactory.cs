@@ -9,7 +9,7 @@ public sealed class TesseractEngineFactory
     private const string EnglishAlias = "eng";
 
     private const string TessVarCharListVariableName = "tessedit_char_whitelist";
-    private const string Charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz’'-:%éèàùêôç0123456789";
+    private const string Charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz’ '-:%éèàùêôç";
 
     private static readonly string TessDataPath = Path.Combine(AppContext.BaseDirectory, TessDataFolderName);
 
