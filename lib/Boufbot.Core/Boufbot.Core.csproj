@@ -7,7 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Boufbot.Infrastructure\Boufbot.Infrastructure.csproj"/>
         <ProjectReference Include="..\Boufbot.OCR\Boufbot.OCR.csproj"/>
     </ItemGroup>
 
